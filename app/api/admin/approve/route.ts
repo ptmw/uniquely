@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update waitlist status to approved
-    const { error: updateError } = await (supabase
+    const { error: updateError } = await (supabaseAdmin
       .from("waitlist")
       .update({
         status: "approved" as const,
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     // Send magic link via Supabase Auth
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.nextUrl.origin;
 
-    const { error: authError } = await supabase.auth.signInWithOtp({
+    const { error: authError } = await supabaseAdmin.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: `${baseUrl}/api/auth/callback`,
